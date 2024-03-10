@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AvaloniaProject">
+    <option name="projectPerEditor">
+      <map>
+        <entry key="AuroraCAD_2D/App.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
+        <entry key="AuroraCAD_2D/Views/CanvasView.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
+        <entry key="AuroraCAD_2D/Views/MainWindow.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
+        <entry key="AuroraCAD_2D/Views/RibbonView.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
+      </map>
+    </option>
+  </component>
+</project>
