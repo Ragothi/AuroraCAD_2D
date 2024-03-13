@@ -5,12 +5,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AuroraCAD_2D.Views.RibbonView"
-             x:DataType="vm:RibbonViewModel">
+             x:DataType="vm:RibbonViewModel"
+             DataContext="$self">
    
     <StackPanel Orientation="Horizontal">
-        <Button Command="{Binding DrawPoint}">Point</Button>
-        <Button>Line</Button>
-        <Button>Circle</Button>
+        <Button x:Name="DrawPointButton" Click="DrawPointFlag" HotKey="Ctrl+D">Point</Button>
+        <Button x:Name="DrawLineButton" Click="DrawLineFlag">Line</Button>
+        <Button x:Name="EscapeKeyHolder" Click="cancellAllFlags" IsVisible="False" >ESC</Button>
+        <Button x:Name="DrawCircleButton" Click="DrawCircleFlag">Circle</Button>
+        
     </StackPanel>
     
 </UserControl>
