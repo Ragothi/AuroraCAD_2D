@@ -40,8 +40,21 @@ public partial class RibbonView : UserControl{
     private void ESCButtonEvent(object? sender, RoutedEventArgs e){
         
         if (Settings.selectedPoint != null && Settings.isDrawXXXSelected[1]){
-            Settings.CanvasGlobalReference.Children.Remove(Settings.selectedPoint);
+            Settings.CanvasGlobalReference.Children.Remove(Settings.selectedLine);
+            if (Settings.isNewPointAdded){
+                Settings.CanvasGlobalReference.Children.Remove(Settings.selectedPoint);
+            }
+            Settings.isNewPointAdded = true;
             Settings.selectedPoint = null;
+            Settings.selectedLine = null;
+        } else if (Settings.selectedPoint != null && Settings.isDrawXXXSelected[2]){
+            Settings.CanvasGlobalReference.Children.Remove(Settings.selectedCircle);
+            if (Settings.isNewPointAdded){
+                Settings.CanvasGlobalReference.Children.Remove(Settings.selectedPoint);
+            }
+            Settings.isNewPointAdded = true;
+            Settings.selectedPoint = null;
+            Settings.selectedCircle = null;
         }
         else{
             _ribbonViewModel.ClearAllFlags();

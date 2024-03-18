@@ -5,7 +5,7 @@ using Brush = Avalonia.Media.Brush;
 
 namespace AuroraCAD_2D.Models;
 
-public class Line :Avalonia.Controls.Shapes.Line ,Drawable{
+public class Line : Avalonia.Controls.Shapes.Line, Drawable{
     private Point _start;
     private Point _end;
     private Layer _layer;
@@ -20,19 +20,29 @@ public class Line :Avalonia.Controls.Shapes.Line ,Drawable{
         StrokeThickness = getLayer().LineSize;
     }
 
+    public void replaceEnd(double x, double y){
+        _end = new Point(x, y);
+        EndPoint = new Avalonia.Point(_end.X, _end.Y);
+    }
+
     public Layer Layer{
         get => _layer;
         set => _layer = value ?? throw new ArgumentNullException(nameof(value));
     }
-
     public Point Start{
         get => _start;
-        set => _start = value ?? throw new ArgumentNullException(nameof(value));
+        set{
+            _start = value;
+            StartPoint = new Avalonia.Point(_start.X, _start.Y);
+        }
     }
 
-    public Point End{
+public Point End{
         get => _end;
-        set => _end = value ?? throw new ArgumentNullException(nameof(value));
+        set{
+            _end = value;
+            EndPoint = new Avalonia.Point(_end.X, _end.Y);
+        }
     }
 
     public Drawable.DrawableType getType(){

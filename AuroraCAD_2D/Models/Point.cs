@@ -17,6 +17,12 @@ public class Point : Ellipse, Drawable{
         Height = getLayer().PointSize;
     }
 
+    public double distance(Point p){
+        double x = X - p.X;
+        double y = Y - p.Y;
+        return Math.Sqrt(x * x + y * y);
+    }
+
     public double X{
         get => _x;
         set => _x = value;

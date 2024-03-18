@@ -6,7 +6,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="AuroraCAD_2D.Views.CanvasView"
              x:DataType="vm:CanvasViewModel">
-    <Canvas x:Name="Canvas" Width="1000" Height="1000" Background="DarkGray" PointerPressed="InputElement_OnPointerPressed">
+    <Canvas x:Name="CanvasViewRef" Width="1000" Height="1000" Background="DarkGray" PointerPressed="InputElement_OnPointerPressed"
+            PointerMoved="pointerOverCanvas" PointerWheelChanged="CanvasViewRef_OnPointerWheelChanged">
         
     </Canvas>
 </UserControl>
