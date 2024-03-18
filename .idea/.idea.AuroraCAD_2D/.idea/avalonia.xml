@@ -7,6 +7,8 @@
         <entry key="AuroraCAD_2D/Views/CanvasView.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
         <entry key="AuroraCAD_2D/Views/MainWindow.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
         <entry key="AuroraCAD_2D/Views/RibbonView.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
+        <entry key="AuroraCAD_2D/Views/TreeView.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
+        <entry key="AuroraCAD_2D/Views/TreeViewItem.axaml" value="AuroraCAD_2D/AuroraCAD_2D.csproj" />
       </map>
     </option>
   </component>

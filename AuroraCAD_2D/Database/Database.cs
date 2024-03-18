@@ -10,6 +10,7 @@ namespace AuroraCAD_2D.Database;
 public class Database{
     private static List<Point> _points = new List<Point>();
     private static List<Drawable> _lines = new List<Drawable>();
+    private static List<Layer> _layers = new List<Layer>();
 
     public static void printEntitiesAmount(){
         Logger.log(string.Format("Points in database: {0}\r\nLines in database: {1}",Points.Count,Lines.Count));
@@ -21,7 +22,18 @@ public class Database{
     public static List<Drawable> Lines{
         get => _lines;
     }
+    
+    public static List<Layer> Layers{
+        get => _layers;
+    }
 
+    public static void addLayer(Layer layer){
+        if (!_layers.Contains(layer)){
+            _layers.Add(layer);
+            Logger.log("New layer added to database");
+        }
+    }
+    
     public static void addPoint(Point point){
         if (!_points.Contains(point)){
             _points.Add(point);

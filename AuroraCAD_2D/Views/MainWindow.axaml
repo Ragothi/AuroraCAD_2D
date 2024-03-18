@@ -11,10 +11,9 @@
         Title="AuroraCAD_2D">
 
     <StackPanel Orientation="Vertical">
-        <Button Command="{Binding TestComment}">Test</Button>
         <views:RibbonView/>
         <StackPanel Orientation="Horizontal">
-            <TreeView/>
+            <views:TreeView/>
             <views:CanvasView/>
         </StackPanel>
     </StackPanel>

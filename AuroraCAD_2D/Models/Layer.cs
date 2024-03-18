@@ -1,19 +1,28 @@
-﻿using Avalonia.Media;
+﻿using System;
+using Avalonia.Media;
 
 namespace AuroraCAD_2D.Models;
 
 public class Layer{
     public static readonly Layer defaultLayer = 
-        new Layer(Brush.Parse(Colors.White.ToString()),6,2);
+        new Layer(Brush.Parse(Colors.White.ToString()),6,2,"Default");
 
     private IBrush _color;
     private double _pointSize;
     private double _lineSize;
+    private string _name ;
 
-    public Layer(IBrush color, double pointSize,double lineSize){
+    public Layer(IBrush color, double pointSize,double lineSize, string name){
         _color = color;
         _pointSize = pointSize;
         _lineSize = lineSize;
+        _name = name;
+        Database.Database.addLayer(this);
+    }
+
+    public string Name{
+        get => _name;
+        set => _name = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     public IBrush Color{

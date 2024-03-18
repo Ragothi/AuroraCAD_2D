@@ -27,4 +27,9 @@
     <ItemGroup>
       <Folder Include="CustomViews\" />
     </ItemGroup>
+
+
+    <ItemGroup>
+      <None Remove="Views\TreeViewItem.axaml.cs~" />
+    </ItemGroup>
 </Project>

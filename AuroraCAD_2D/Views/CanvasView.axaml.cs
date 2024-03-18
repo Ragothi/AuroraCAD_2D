@@ -59,8 +59,10 @@ public partial class CanvasView : UserControl{
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e){
         if (Settings.isDrawXXXSelected[0]){
             Point p = _canvasViewModel.PointerPressedHandler(sender,e);
-            validatePoint(p);
+            p = validatePoint(p);
             Settings.isNewPointAdded = true;
+            p.PointerEntered += PointOnPointerEntered;
+            p.PointerExited += PointOnPointerExited;
         }
         else if (Settings.isDrawXXXSelected[1]){
             if (Settings.selectedPoint is null){
@@ -70,6 +72,8 @@ public partial class CanvasView : UserControl{
                 Line line = new Line(Settings.selectedPoint, p2);
                 Settings.selectedLine = line;
                 drawNew(line);
+                p.PointerEntered += PointOnPointerEntered;
+                p.PointerExited += PointOnPointerExited;
             }
             else{
                 Line l = Settings.selectedLine;
@@ -93,8 +97,11 @@ public partial class CanvasView : UserControl{
             }
             else{
                 Circle c = Settings.selectedCircle;
+                Point p = c.Centre;
                 c.PointerEntered += CircleOnPointerEntered;
                 c.PointerExited += CircleOnPointerExited;
+                p.PointerEntered += PointOnPointerEntered;
+                p.PointerExited += PointOnPointerExited;
                 Settings.selectedCircle = null;
                 Settings.selectedPoint = null;
                 Database.Database.addLine(c);
@@ -111,9 +118,8 @@ public partial class CanvasView : UserControl{
         switch (d.getType()){
             case Drawable.DrawableType.POINT:
                 Point p = d as Point ?? throw new InvalidOperationException();
-                Utils.addToCanvas(CanvasViewRef,p,p.X-p.getLayer().PointSize/2,p.Y-p.getLayer().PointSize/2,0,0,false);
-                p.PointerEntered += PointOnPointerEntered;
-                p.PointerExited += PointOnPointerExited;
+                Utils.addToCanvas(CanvasViewRef, p, p.X - p.getLayer().PointSize / 2, p.Y - p.getLayer().PointSize / 2,
+                    0, 0, false);
                 break;
             case Drawable.DrawableType.LINE:
                 Line l = d as Line ?? throw new InvalidOperationException();
