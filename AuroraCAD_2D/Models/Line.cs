@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using AuroraCAD_2D.Database;
 using Avalonia.Skia;
 using Brush = Avalonia.Media.Brush;
 
@@ -13,7 +14,7 @@ public class Line : Avalonia.Controls.Shapes.Line, Drawable{
     public Line(Point start, Point end){
         _start = start;
         _end = end;
-        _layer = Layer.defaultLayer;
+        _layer = Settings.selectedLayer;
         StartPoint = new Avalonia.Point(_start.X, _start.Y);
         EndPoint = new Avalonia.Point(_end.X, _end.Y);
         Stroke = getLayer().Color;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.Intrinsics.X86;
+using AuroraCAD_2D.Database;
 using Avalonia.Controls;
 using Avalonia.Controls.Shapes;
 
@@ -12,7 +13,7 @@ public class Circle : Ellipse, Drawable{
 
     public Circle(double x, double y, double rad){
         _centre = new Point(x, y);
-        _layer = Layer.defaultLayer;
+        _layer = Settings.selectedLayer;
         _rad = rad;
         Stroke = Layer.Color;
         StrokeThickness = getLayer().LineSize;

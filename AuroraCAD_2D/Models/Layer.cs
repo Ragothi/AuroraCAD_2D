@@ -11,6 +11,7 @@ public class Layer{
     private double _pointSize;
     private double _lineSize;
     private string _name ;
+    private bool _isVisible = true;
 
     public Layer(IBrush color, double pointSize,double lineSize, string name){
         _color = color;
@@ -18,6 +19,11 @@ public class Layer{
         _lineSize = lineSize;
         _name = name;
         Database.Database.addLayer(this);
+    }
+
+    public bool IsVisible{
+        get => _isVisible;
+        set => _isVisible = value;
     }
 
     public string Name{

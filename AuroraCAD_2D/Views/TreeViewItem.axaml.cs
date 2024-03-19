@@ -33,6 +33,16 @@ public partial class TreeViewItem : UserControl{
         ShowButton.IsVisible = isContainer;
         if (isContainer){
             _children = new List<TreeViewItem>();
+            
+            ShowButton.Click += (sender, args) => {
+                bool flag = ShowButton.Content.ToString() == "+";
+                ShowButton.Content = flag ? "-" : "+";
+               
+                foreach (TreeViewItem item in _children){ 
+                    item.IsVisible = flag;
+                }
+                
+            };
         } else{
             IconImage.Margin = new Thickness(40,0,0,0);
         }
@@ -49,6 +59,8 @@ public partial class TreeViewItem : UserControl{
             
         }
     }
+
+    public List<TreeViewItem> Children => _children;
 
     public void addItem(TreeViewItem item){
         if (ShowButton.IsVisible){

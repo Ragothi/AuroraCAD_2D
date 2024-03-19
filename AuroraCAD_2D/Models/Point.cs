@@ -1,4 +1,5 @@
 ﻿using System;
+using AuroraCAD_2D.Database;
 using Avalonia.Controls.Shapes;
 
 namespace AuroraCAD_2D.Models;
@@ -11,7 +12,7 @@ public class Point : Ellipse, Drawable{
     public Point(double x, double y){
         _x = x;
         _y = y;
-        _layer = Layer.defaultLayer;
+        _layer = Settings.selectedLayer;
         Fill = getLayer().Color;
         Width = getLayer().PointSize;
         Height = getLayer().PointSize;
