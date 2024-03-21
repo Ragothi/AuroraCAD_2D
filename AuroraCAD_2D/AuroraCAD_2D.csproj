@@ -6,6 +6,8 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <!--<StartupObject>AuroraCAD_2D.Testing.Test</StartupObject>-->
+        <StartupObject>AuroraCAD_2D.Program</StartupObject>
     </PropertyGroup>
 
     <ItemGroup>

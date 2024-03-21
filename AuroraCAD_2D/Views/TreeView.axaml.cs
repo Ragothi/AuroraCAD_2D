@@ -25,29 +25,40 @@ public partial class TreeView : UserControl{
     private List<TreeViewItem> rootsList = new List<TreeViewItem>();
     public TreeView(){
         InitializeComponent();
+        Settings.TreeViewGlobalReference = this;
         _treeViewViewmodel = new TreeViewViewmodel();
         TreeViewItem layersRoot = new TreeViewItem("Layers", Settings.assetsFolder + "layer_icon.png", true);
         rootsList.Add(layersRoot);
+        TreeViewRoot.Children.Add(rootsList[0]);
         
         addLayer(Layer.defaultLayer);
-        (rootsList[0].Children[0].NameTB.Parent as StackPanel).Background = Brush.Parse(Color.YellowGreen.Name);
+        (rootsList[0].ChildrenList[0].NameTB.Parent as StackPanel).Background = Brush.Parse(Color.YellowGreen.Name);
         
         Layer rLayer = new Layer(Brushes.Red, 6,4,"Red Layer");
         addLayer(rLayer);
         
-
+        
+        /*
         foreach (TreeViewItem treeRoot in rootsList){
             TreeViewRoot.Children.Add(treeRoot);
-            foreach (TreeViewItem c in treeRoot.Children){
+            foreach (TreeViewItem c in treeRoot.ChildrenList){
                 TreeViewRoot.Children.Add(c);
             }
         }
-        
+        */
 
 
     }
 
-    private void addLayer(Layer layer){
+    public List<TreeViewItem> RootsList => rootsList;
+
+    public void clearLayers(){
+        rootsList[0].ChildrenList.Clear();
+        TreeViewRoot.Children.Clear();
+        TreeViewRoot.Children.Add(rootsList[0]);
+    }
+
+    public void addLayer(Layer layer){
         TreeViewItem newLayer = new TreeViewItem(layer.Name, false,layer.Color);
         newLayer.NameTB.PointerPressed += LayerNamePressed;
         newLayer.IconImage.PointerPressed += LayerColorPressed;
@@ -59,19 +70,22 @@ public partial class TreeView : UserControl{
         (newLayer.NameTB.Parent as StackPanel).Children.Add(image);
         
         rootsList[0].addItem(newLayer);
+        TreeViewRoot.Children.Add(newLayer);
     }
 
     private void LayerNamePressed(object? sender, PointerPressedEventArgs e){
-        TreeViewItem currentLayerTVI = rootsList[0].Children[Database.Database.Layers.IndexOf(Settings.selectedLayer)];
-        (currentLayerTVI.NameTB.Parent as StackPanel).Background = Brush.Parse(Color.Black.Name);
+        if (Settings.selectedLayer != null){
+            TreeViewItem currentLayerTVI = rootsList[0].ChildrenList[Database.Database.Layers.IndexOf(Settings.selectedLayer)];
+            (currentLayerTVI.NameTB.Parent as StackPanel).Background = Brush.Parse(Color.Black.Name);
+        }
         TreeViewItem item = ((sender as TextBlock).Parent as StackPanel).Parent as TreeViewItem;
-        Settings.selectedLayer = Database.Database.Layers[rootsList[0].Children.IndexOf(item)];
+        Settings.selectedLayer = Database.Database.Layers[rootsList[0].ChildrenList.IndexOf(item)];
         (item.NameTB.Parent as StackPanel).Background = Brush.Parse(Color.YellowGreen.Name);
     }
 
     private void changeLayerVisibility(object? sender, PointerPressedEventArgs e){
         TreeViewItem item = (((sender as Image).Parent as StackPanel).Parent) as TreeViewItem;
-        Layer layer = Database.Database.Layers[rootsList[0].Children.IndexOf(item)];
+        Layer layer = Database.Database.Layers[rootsList[0].ChildrenList.IndexOf(item)];
         bool flag = !layer.IsVisible;
         if (flag){
             (sender as Image).Source = new Bitmap(Settings.assetsFolder + "visible.png");

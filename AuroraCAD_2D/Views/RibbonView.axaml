@@ -7,18 +7,25 @@
              x:Class="AuroraCAD_2D.Views.RibbonView"
              x:DataType="vm:RibbonViewModel"
              DataContext="$self">
-   
-    <StackPanel Orientation="Horizontal">
-        <StackPanel.Styles>
-            <Style Selector="Button:pointerover /template/ ContentPresenter">
-                <Setter Property="Background" Value="Coral"/>
-            </Style>
-        </StackPanel.Styles>
-        <Button x:Name="DrawPointButton" Click="DrawPointFlag" HotKey="Ctrl+D">Point</Button>
-        <Button x:Name="DrawLineButton" Click="DrawLineFlag">Line</Button>
-        <Button x:Name="EscapeKeyHolder" Click="ESCButtonEvent" IsVisible="False" >ESC</Button>
-        <Button x:Name="DrawCircleButton" Click="DrawCircleFlag" >Circle</Button>
+   <StackPanel Orientation="Vertical">
+       <StackPanel Orientation="Horizontal">
+           <Button Click="SaveProjectButtonOnClick" HotKey="Ctrl+S">Save</Button>
+           <Button Click="LoadProjectButtonOnClick" HotKey="Ctrl+Q">Open</Button>
+       </StackPanel>
        
-    </StackPanel>
+       <StackPanel Orientation="Horizontal">
+           <StackPanel.Styles>
+               <Style Selector="Button:pointerover /template/ ContentPresenter">
+                   <Setter Property="Background" Value="Coral"/>
+               </Style>
+           </StackPanel.Styles>
+           <Button x:Name="DrawPointButton" Click="DrawPointFlag" HotKey="Ctrl+D">Point</Button>
+           <Button x:Name="DrawLineButton" Click="DrawLineFlag">Line</Button>
+           <Button x:Name="EscapeKeyHolder" Click="ESCButtonEvent" IsVisible="False" >ESC</Button>
+           <Button x:Name="DrawCircleButton" Click="DrawCircleFlag" >Circle</Button>
+       
+       </StackPanel>
+   </StackPanel>
+    
     
 </UserControl>

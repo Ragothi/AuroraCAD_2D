@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Reflection;
 using AuroraCAD_2D.Models;
+using AuroraCAD_2D.Views;
 using Avalonia.Controls;
+using TreeView = AuroraCAD_2D.Views.TreeView;
 
 namespace AuroraCAD_2D.Database;
 
@@ -22,6 +24,8 @@ public static Line selectedLine = null;
 public static Circle selectedCircle = null;
 public static Layer selectedLayer = Layer.defaultLayer;
 public static Canvas CanvasGlobalReference = null;
+public static CanvasView CanvasViewGlobalReference = null;
+public static TreeView TreeViewGlobalReference = null;
 
 public static double mouseX, mouseY;
 public static double margin = 10;

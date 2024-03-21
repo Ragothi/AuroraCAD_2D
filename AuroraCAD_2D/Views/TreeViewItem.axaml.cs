@@ -9,7 +9,7 @@ using Color = System.Drawing.Color;
 namespace AuroraCAD_2D.Views;
 
 public partial class TreeViewItem : UserControl{
-    private List<TreeViewItem> _children;
+    private List<TreeViewItem> _childrenList;
   
 
     public TreeViewItem(string name, bool isContainer){
@@ -32,13 +32,13 @@ public partial class TreeViewItem : UserControl{
         NameTB.Text = name;
         ShowButton.IsVisible = isContainer;
         if (isContainer){
-            _children = new List<TreeViewItem>();
+            _childrenList = new List<TreeViewItem>();
             
             ShowButton.Click += (sender, args) => {
                 bool flag = ShowButton.Content.ToString() == "+";
                 ShowButton.Content = flag ? "-" : "+";
                
-                foreach (TreeViewItem item in _children){ 
+                foreach (TreeViewItem item in _childrenList){ 
                     item.IsVisible = flag;
                 }
                 
@@ -60,11 +60,11 @@ public partial class TreeViewItem : UserControl{
         }
     }
 
-    public List<TreeViewItem> Children => _children;
+    public List<TreeViewItem> ChildrenList => _childrenList;
 
     public void addItem(TreeViewItem item){
         if (ShowButton.IsVisible){
-            _children.Add(item);
+            _childrenList.Add(item);
         } 
     }
     

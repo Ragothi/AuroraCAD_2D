@@ -7,12 +7,20 @@ namespace AuroraCAD_2D.Models;
 public class Point : Ellipse, Drawable{
     private double _x, _y;
     private Layer _layer;
-    
+
+    public Point(double x, double y, Layer layer){
+        _layer = layer;
+        commonConstructor(x,y);
+    }
 
     public Point(double x, double y){
+        _layer = Settings.selectedLayer;
+        commonConstructor(x,y);
+    }
+
+    private void commonConstructor(double x, double y){
         _x = x;
         _y = y;
-        _layer = Settings.selectedLayer;
         Fill = getLayer().Color;
         Width = getLayer().PointSize;
         Height = getLayer().PointSize;

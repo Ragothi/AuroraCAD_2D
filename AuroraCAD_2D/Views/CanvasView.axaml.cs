@@ -25,6 +25,7 @@ public partial class CanvasView : UserControl{
     public CanvasView(){
         InitializeComponent();
         Settings.CanvasGlobalReference = CanvasViewRef;
+        Settings.CanvasViewGlobalReference = this;
         
     }
 
@@ -114,27 +115,51 @@ public partial class CanvasView : UserControl{
         
     }
     
-    private void drawNew(Drawable d){
+    public void drawNew(Drawable d){
         switch (d.getType()){
             case Drawable.DrawableType.POINT:
                 Point p = d as Point ?? throw new InvalidOperationException();
-                Utils.addToCanvas(CanvasViewRef, p, p.X - p.getLayer().PointSize / 2, p.Y - p.getLayer().PointSize / 2,
+                Utils.addToCanvas(Settings.CanvasGlobalReference, p, p.X - p.getLayer().PointSize / 2, p.Y - p.getLayer().PointSize / 2,
                     0, 0, false);
                 break;
             case Drawable.DrawableType.LINE:
                 Line l = d as Line ?? throw new InvalidOperationException();
                 // drewNew(l.End);
-                CanvasViewRef.Children.Add(l);
+                Settings.CanvasGlobalReference.Children.Add(l);
                 break;
             case Drawable.DrawableType.CIRCLE:
                 Circle c = d as Circle ?? throw new InvalidOperationException();
-                Utils.addToCanvas(CanvasViewRef,c,c.Centre.X-c.Rad,c.Centre.Y-c.Rad,0,0,false);
+                Utils.addToCanvas(Settings.CanvasGlobalReference,c,c.Centre.X-c.Rad,c.Centre.Y-c.Rad,0,0,false);
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
     }
 
+    public void drawNew(Drawable d, bool addListeners){
+        drawNew(d);
+        if (addListeners){
+            switch (d.getType()){
+                case Drawable.DrawableType.POINT:
+                    Point p = d as Point;
+                    p.PointerEntered += PointOnPointerEntered;
+                    p.PointerExited += PointOnPointerExited;
+                    break;
+                case Drawable.DrawableType.LINE:
+                    Line l = d as Line;
+                    l.PointerEntered += LineOnPointerEntered;
+                    l.PointerExited += LineOnPointerExited;
+                    break;
+                case Drawable.DrawableType.CIRCLE:
+                    Circle c = d as Circle;
+                    c.PointerEntered += CircleOnPointerEntered;
+                    c.PointerExited += CircleOnPointerExited;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
    
 
     private void PointOnPointerEntered(object? sender, PointerEventArgs e){
