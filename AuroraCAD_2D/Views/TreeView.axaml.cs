@@ -14,6 +14,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Styling;
+using AvaloniaColorPicker;
 using DynamicData;
 using Color = System.Drawing.Color;
 using Point = AuroraCAD_2D.Models.Point;
@@ -35,7 +36,11 @@ public partial class TreeView : UserControl{
         (rootsList[0].ChildrenList[0].NameTB.Parent as StackPanel).Background = Brush.Parse(Color.YellowGreen.Name);
         
         Layer rLayer = new Layer(Brushes.Red, 6,4,"Red Layer");
+        Layer gLayer = new Layer(Brushes.Green, 6,4,"Green Layer");
+        Layer bLayer = new Layer(Brushes.DodgerBlue, 6,4,"Blue Layer");
         addLayer(rLayer);
+        addLayer(gLayer);
+        addLayer(bLayer);
         
         
         /*
@@ -116,19 +121,13 @@ public partial class TreeView : UserControl{
         layer.IsVisible = flag;
     }
     
-    private void LayerColorPressed(object? sender, PointerPressedEventArgs e){
-        
-        /**
+    private async void LayerColorPressed(object? sender, PointerPressedEventArgs e){
         TreeViewItem item = ((sender as Image).Parent as StackPanel).Parent as TreeViewItem;
-        ColorPicker cp = new ColorPicker();
-        cp.Background = Brush.Parse(Color.Cyan.Name);
-        cp.Color = Avalonia.Media.Color.Parse("Cyan");
-        cp.Width = 200;
-        cp.Height = 200;
-        
-        Settings.CanvasGlobalReference.Children.Add(cp);
-        
-        Logger.log("LOL");
-        */
+        ColorPickerWindow cp = new ColorPickerWindow(Avalonia.Media.Color.Parse(item.getColor().ToString()));
+        Avalonia.Media.Color? color = await cp.ShowDialog(TopLevel.GetTopLevel(this) as Window);
+        if (color != null){
+            item.setColor(Brush.Parse(color.ToString()));
+            Database.Database.Layers[rootsList[0].ChildrenList.IndexOf(item)].updateLayerColor(Brush.Parse(color.ToString()));
+        }
     }
 }

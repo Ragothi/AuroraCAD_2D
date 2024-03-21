@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Color = System.Drawing.Color;
+using Size = Avalonia.Size;
 
 namespace AuroraCAD_2D.Views;
 
@@ -52,12 +54,20 @@ public partial class TreeViewItem : UserControl{
         }
 
         if (color != null){
-            GeometryDrawing gd = new GeometryDrawing();
-            gd.Geometry = new RectangleGeometry(new Rect(new Size(30, 30)));
-            gd.Brush = color;
-            IconImage.Source = new DrawingImage(gd);
+            setColor(color);
             
         }
+    }
+
+    public IBrush getColor(){
+        return ((IconImage.Source as DrawingImage).Drawing as GeometryDrawing).Brush;
+    }
+
+    public void setColor(IBrush color){
+        GeometryDrawing gd = new GeometryDrawing();
+        gd.Geometry = new RectangleGeometry(new Rect(new Size(30, 30)));
+        gd.Brush = color;
+        IconImage.Source = new DrawingImage(gd);
     }
 
     public List<TreeViewItem> ChildrenList => _childrenList;
