@@ -32,27 +32,6 @@ public partial class TreeView : UserControl{
         rootsList.Add(layersRoot);
         TreeViewRoot.Children.Add(rootsList[0]);
         
-        addLayer(Layer.defaultLayer);
-        (rootsList[0].ChildrenList[0].NameTB.Parent as StackPanel).Background = Brush.Parse(Color.YellowGreen.Name);
-        
-        Layer rLayer = new Layer(Brushes.Red, 6,4,"Red Layer");
-        Layer gLayer = new Layer(Brushes.Green, 6,4,"Green Layer");
-        Layer bLayer = new Layer(Brushes.DodgerBlue, 6,4,"Blue Layer");
-        addLayer(rLayer);
-        addLayer(gLayer);
-        addLayer(bLayer);
-        
-        
-        /*
-        foreach (TreeViewItem treeRoot in rootsList){
-            TreeViewRoot.Children.Add(treeRoot);
-            foreach (TreeViewItem c in treeRoot.ChildrenList){
-                TreeViewRoot.Children.Add(c);
-            }
-        }
-        */
-
-
     }
 
     public List<TreeViewItem> RootsList => rootsList;

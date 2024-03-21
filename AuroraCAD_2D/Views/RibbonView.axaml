@@ -9,6 +9,7 @@
              DataContext="$self">
    <StackPanel Orientation="Vertical">
        <StackPanel Orientation="Horizontal">
+           <Button Click="NewProjectButtonOnClick" HotKey="Ctrl+N">New</Button>
            <Button Click="SaveProjectButtonOnClick" HotKey="Ctrl+S">Save</Button>
            <Button Click="LoadProjectButtonOnClick" HotKey="Ctrl+Q">Open</Button>
        </StackPanel>

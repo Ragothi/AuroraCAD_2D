@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Reactive;
+using System.Threading.Tasks;
 using AuroraCAD_2D.Database;
 using AuroraCAD_2D.Models;
 using AuroraCAD_2D.Services;
@@ -25,6 +26,7 @@ public partial class RibbonView : UserControl{
     
     public RibbonView(){
         InitializeComponent();
+        Settings.RibbonViewGlobalReference = this;
         // HotKeyManager.SetHotKey(DrawPointButton, new KeyGesture(Key.D, KeyModifiers.Control));
         HotKeyManager.SetHotKey(DrawLineButton, new KeyGesture(Key.F, KeyModifiers.Control));
         HotKeyManager.SetHotKey(DrawCircleButton, new KeyGesture(Key.G, KeyModifiers.Control));
@@ -124,37 +126,46 @@ public partial class RibbonView : UserControl{
 
         if (files.Count == 1)
         {
-            //Clear current screen content
-            ESCButtonEvent(null,null);
-            ESCButtonEvent(null,null);
-            Settings.CanvasGlobalReference.Children.Clear();
-            Settings.TreeViewGlobalReference.clearLayers();
-            
-            //clear current data from database
-            Database.Database.emptyDatabase();
-            
-            //Load new data into database
-            Database.Database.read(files[0].Path.AbsolutePath);
-            
-            //load layers onto TreeView
-            foreach (Layer layer in Database.Database.Layers){
-                Settings.TreeViewGlobalReference.addLayer(layer);
-            }
-            TreeViewItem item = Settings.TreeViewGlobalReference.RootsList[0].ChildrenList[0];
-            (item.NameTB.Parent as StackPanel).Background = Brush.Parse(Color.YellowGreen.Name);
-            Settings.selectedLayer = Database.Database.Layers[0];
-            
-
-            //Load points and lines onto Canvas
-            foreach (Point point in Database.Database.Points){
-                Settings.CanvasViewGlobalReference.drawNew(point,true);
-            }
-
-            foreach (Drawable line in Database.Database.Lines){
-                Settings.CanvasViewGlobalReference.drawNew(line,true);
-            }
-            
-            Database.Database.printEntitiesAmount();
+            loadProjectFromFile(files[0]);
         }
+    }
+
+    private void loadProjectFromFile(IStorageFile file){
+        //Clear current screen content
+        ESCButtonEvent(null,null);
+        ESCButtonEvent(null,null);
+        Settings.CanvasGlobalReference.Children.Clear();
+        Settings.TreeViewGlobalReference.clearLayers();
+            
+        //clear current data from database
+        Database.Database.emptyDatabase();
+            
+        //Load new data into database
+        Database.Database.read(file.Path.AbsolutePath);
+            
+        //load layers onto TreeView
+        foreach (Layer layer in Database.Database.Layers){
+            Settings.TreeViewGlobalReference.addLayer(layer);
+        }
+        TreeViewItem item = Settings.TreeViewGlobalReference.RootsList[0].ChildrenList[0];
+        (item.NameTB.Parent as StackPanel).Background = Brush.Parse(Color.YellowGreen.Name);
+        Settings.selectedLayer = Database.Database.Layers[0];
+            
+
+        //Load points and lines onto Canvas
+        foreach (Point point in Database.Database.Points){
+            Settings.CanvasViewGlobalReference.drawNew(point,true);
+        }
+
+        foreach (Drawable line in Database.Database.Lines){
+            Settings.CanvasViewGlobalReference.drawNew(line,true);
+        }
+            
+        Database.Database.printEntitiesAmount();
+    }
+
+    public async void NewProjectButtonOnClick(object? sender, RoutedEventArgs e){
+        loadProjectFromFile(await TopLevel.GetTopLevel(Settings.RibbonViewGlobalReference).StorageProvider
+            .TryGetFileFromPathAsync(Settings.assetsFolder + "defaultTemplate.txt"));
     }
 }

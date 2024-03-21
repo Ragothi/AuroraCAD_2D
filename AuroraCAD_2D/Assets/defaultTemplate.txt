@@ -1,0 +1,4 @@
+<LAY>	Default	White	6	2
+<LAY>	Red Layer	Red	6	4
+<LAY>	Green Layer	Green	6	4
+<LAY>	Blue Layer	DodgerBlue	6	4

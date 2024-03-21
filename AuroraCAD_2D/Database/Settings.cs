@@ -26,12 +26,14 @@ public static Layer selectedLayer = Layer.defaultLayer;
 public static Canvas CanvasGlobalReference = null;
 public static CanvasView CanvasViewGlobalReference = null;
 public static TreeView TreeViewGlobalReference = null;
+public static RibbonView RibbonViewGlobalReference = null;
 
 public static double mouseX, mouseY;
 public static double margin = 10;
 
 public static readonly string rootFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Split("bin\\Debug\\net7.0")[0];
 public static readonly string assetsFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location).Split("bin\\Debug\\net7.0")[0]+"/Assets/";
+
 
 public static void clearIsDrawnFlags(int skip){
     for (int i = 0; i < isDrawXXXSelected.Length; i++){
