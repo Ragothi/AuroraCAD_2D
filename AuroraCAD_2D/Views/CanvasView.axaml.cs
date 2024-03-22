@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AuroraCAD_2D.Database;
 using AuroraCAD_2D.Models;
 using AuroraCAD_2D.Services;
@@ -26,7 +27,9 @@ public partial class CanvasView : UserControl{
         InitializeComponent();
         Settings.CanvasGlobalReference = CanvasViewRef;
         Settings.CanvasViewGlobalReference = this;
-        
+        Utils.addToCanvas(CanvasViewRef,Settings.selectionBox,0,0,0,0,false);
+        Settings.selectionBox.IsVisible = false;
+
     }
 
     private void pointerOverCanvas(object? sender, PointerEventArgs e){
@@ -36,6 +39,25 @@ public partial class CanvasView : UserControl{
             Settings.selectedLine.replaceEnd(Settings.mouseX,Settings.mouseY);
         } else if (Settings.selectedPoint != null && Settings.selectedCircle != null && Settings.isDrawXXXSelected[2]){
             Settings.selectedCircle.changeRadius(Settings.mouseX, Settings.mouseY);
+        } else if (Settings.selectionBox.IsVisible){
+            double dx = Settings.mouseX - Settings.clickedCanvasIn.X;
+            double dy = Settings.mouseY - Settings.clickedCanvasIn.Y;
+            if (dx <=0){
+                Canvas.SetLeft(Settings.selectionBox,Settings.mouseX);
+                Settings.selectionBox.Width = Math.Abs(Settings.mouseX - Settings.clickedCanvasIn.X);
+            } else if (dx > 0){
+                Canvas.SetLeft(Settings.selectionBox,Settings.clickedCanvasIn.X);
+                Settings.selectionBox.Width = Math.Abs(Settings.mouseX - Settings.clickedCanvasIn.X);
+            }
+
+            if (dy >=0){
+                Canvas.SetTop(Settings.selectionBox,Settings.clickedCanvasIn.Y);
+                Settings.selectionBox.Height = Math.Abs(Settings.mouseY - Settings.clickedCanvasIn.Y);
+            } else if (dy < 0){
+                Canvas.SetTop(Settings.selectionBox,Settings.mouseY);
+                Settings.selectionBox.Height = Math.Abs(Settings.mouseY - Settings.clickedCanvasIn.Y);
+            }
+            
         }
     }
 
@@ -58,6 +80,10 @@ public partial class CanvasView : UserControl{
     }
 
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e){
+        if (e.KeyModifiers != KeyModifiers.Control){
+            Database.Database.unselectAll();    
+        }
+        
         if (Settings.isDrawXXXSelected[0]){
             Point p = _canvasViewModel.PointerPressedHandler(sender,e);
             p = validatePoint(p);
@@ -109,6 +135,20 @@ public partial class CanvasView : UserControl{
                 Settings.isNewPointAdded = true;
             }
         }
+        else if (e.Pointer.IsPrimary){
+            Logger.log("Selection box activated");
+            if (!CanvasViewRef.Children.Contains(Settings.selectionBox)){
+                CanvasViewRef.Children.Add(Settings.selectionBox);
+            }
+            Settings.selectionBox.IsVisible = true;
+            Settings.clickedCanvasIn = new Point(Settings.mouseX, Settings.mouseY);
+            // Canvas.SetLeft(Settings.selectionBox,Settings.mouseX);
+            // Canvas.SetTop(Settings.selectionBox,Settings.mouseY);
+            Settings.selectionBox.Width = 1;
+            Settings.selectionBox.Height = 1;
+            
+        }
+        
     }
 
     private void redraw(){
@@ -163,30 +203,42 @@ public partial class CanvasView : UserControl{
    
 
     private void PointOnPointerEntered(object? sender, PointerEventArgs e){
-        (sender as Point).Fill = Brushes.Coral;
+        if (!Settings.selectedDrawables.Any()){
+            (sender as Point).Fill = Settings.highlightColor;
+        }
     }
     
     private void PointOnPointerExited(object? sender, PointerEventArgs e){
-        Point p = (sender as Point);
-        p.Fill = Brush.Parse(p.getLayer().Color.ToString());
+        if (!Settings.selectedDrawables.Any()){
+            Point p = (sender as Point);
+            p.Fill = Brush.Parse(p.getLayer().Color.ToString());
+        }
     }
     
     private void LineOnPointerEntered(object? sender, PointerEventArgs e){
-        (sender as Line).Stroke = Brushes.Coral;
+        if (!Settings.selectedDrawables.Any()){
+            (sender as Line).Stroke = Settings.highlightColor;
+        }
     }
     
     private void LineOnPointerExited(object? sender, PointerEventArgs e){
-        Line l = (sender as Line);
-        l.Stroke = Brush.Parse(l.getLayer().Color.ToString());
+        if (!Settings.selectedDrawables.Any()){
+            Line l = (sender as Line);
+            l.Stroke = Brush.Parse(l.getLayer().Color.ToString());
+        }
     }
     
     private void CircleOnPointerEntered(object? sender, PointerEventArgs e){
-        (sender as Circle).Stroke = Brushes.Coral;
+        if (!Settings.selectedDrawables.Any()){
+            (sender as Circle).Stroke = Settings.highlightColor;
+        }
     }
     
     private void CircleOnPointerExited(object? sender, PointerEventArgs e){
-        Circle c = (sender as Circle);
-        c.Stroke = Brush.Parse(c.getLayer().Color.ToString());
+        if (!Settings.selectedDrawables.Any()){
+            Circle c = (sender as Circle);
+            c.Stroke = Brush.Parse(c.getLayer().Color.ToString());
+        }
     }
 
     private void CanvasViewRef_OnPointerWheelChanged(object? sender, PointerWheelEventArgs e){
@@ -195,6 +247,35 @@ public partial class CanvasView : UserControl{
              * Implement zoom method
              * 
              */
+        }
+    }
+
+    private void CanvasViewRef_OnPointerReleased(object? sender, PointerReleasedEventArgs e){
+        if (Settings.selectionBox.IsVisible){
+            Logger.log("Selection box deactivated");
+            Settings.selectionBox.IsVisible = false;
+            Database.Database.getDrawablesInSelection();
+            foreach (Drawable d in Settings.selectedDrawables){
+                switch (d.getType()){
+                    case Drawable.DrawableType.POINT:
+                        Point p = d as Point;
+                        p.Fill = Settings.highlightColor;
+                        break;
+                    case Drawable.DrawableType.LINE:
+                        Line l = d as Line;
+                        l.Stroke = Settings.highlightColor;
+                        l.Start.Fill = Settings.highlightColor;
+                        l.End.Fill = Settings.highlightColor;
+                        break;
+                    case Drawable.DrawableType.CIRCLE:
+                        Circle c = d as Circle;
+                        c.Centre.Fill = Settings.highlightColor;
+                        c.Stroke = Settings.highlightColor;
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ public partial class RibbonView : UserControl{
         HotKeyManager.SetHotKey(DrawLineButton, new KeyGesture(Key.F, KeyModifiers.Control));
         HotKeyManager.SetHotKey(DrawCircleButton, new KeyGesture(Key.G, KeyModifiers.Control));
         HotKeyManager.SetHotKey(EscapeKeyHolder, new KeyGesture(Key.Escape));
+        HotKeyManager.SetHotKey(DeleteKeyHolder, new KeyGesture(Key.Delete));
        _buttons.Add(DrawPointButton);
        _buttons.Add(DrawLineButton);
        _buttons.Add(DrawCircleButton);
@@ -66,11 +67,13 @@ public partial class RibbonView : UserControl{
         else{
             _ribbonViewModel.ClearAllFlags();
             removeButtonsColor();
+            Database.Database.unselectAll();
         }
     }
 
     private void highlight(Button button, bool flag){
         removeButtonsColor();
+        Database.Database.unselectAll();
         if (flag){
             button.Background = Avalonia.Media.Brush.Parse(Color.YellowGreen.Name);
         }
@@ -167,5 +170,9 @@ public partial class RibbonView : UserControl{
     public async void NewProjectButtonOnClick(object? sender, RoutedEventArgs e){
         loadProjectFromFile(await TopLevel.GetTopLevel(Settings.RibbonViewGlobalReference).StorageProvider
             .TryGetFileFromPathAsync(Settings.assetsFolder + "defaultTemplate.txt"));
+    }
+
+    private void DELButtonEvent(object? sender, RoutedEventArgs e){
+        Database.Database.deleteAllSelected();
     }
 }

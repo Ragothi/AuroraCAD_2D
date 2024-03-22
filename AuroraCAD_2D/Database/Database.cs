@@ -123,4 +123,92 @@ public class Database{
             
         }
     }
+
+    public static void getDrawablesInSelection(){
+        double xMin = Canvas.GetLeft(Settings.selectionBox);
+        double xMax = xMin + Settings.selectionBox.Width;
+        double yMin = Canvas.GetTop(Settings.selectionBox);
+        double yMax = yMin + Settings.selectionBox.Height;
+
+        foreach (Point point in _points){
+            if (point.X >= xMin && point.X <= xMax && point.Y >= yMin && point.Y <= yMax){
+                Settings.selectedDrawables.Add(point);
+            }
+        }
+
+        foreach (Drawable line in _lines){
+            if (line.getType() == Drawable.DrawableType.LINE){
+                Line l = line as Line;
+                Point point = l.Start;
+                Point point2 = l.End;
+                if ((point.X >= xMin && point.X <= xMax && point.Y >= yMin && point.Y <= yMax)
+                    || (point2.X >= xMin && point2.X <= xMax && point2.Y >= yMin && point2.Y <= yMax)){
+                    Settings.selectedDrawables.Add(point);
+                    Settings.selectedDrawables.Add(point2);
+                    Settings.selectedDrawables.Add(line);
+                }
+            } else if (line.getType() == Drawable.DrawableType.CIRCLE){
+                Circle c = line as Circle;
+                Point point = c.Centre;
+                if (point.X >= xMin-c.Rad && point.X <= xMax+c.Rad && point.Y >= yMin-c.Rad && point.Y <= yMax+c.Rad){
+                    Settings.selectedDrawables.Add(point);
+                    Settings.selectedDrawables.Add(c);
+                }
+            }
+        }
+        
+        logSelectedDrawablesContent();
+        
+    }
+
+    private static void logDatabaseContent(){
+        Logger.log(string.Format("Points: {0}\r\nLines: {1}\r\nCircles: {2}",
+            _points.Count,
+            _lines.Where(d => d.getType() == Drawable.DrawableType.LINE).Count(),
+           _lines.Where(d => d.getType() == Drawable.DrawableType.CIRCLE).Count()
+        ));
+    }
+    
+    private static void logSelectedDrawablesContent(){
+        Logger.log(string.Format("Points: {0}\r\nLines: {1}\r\nCircles: {2}",
+            Settings.selectedDrawables.Where(d => d.getType() == Drawable.DrawableType.POINT).Count(),
+            Settings.selectedDrawables.Where(d => d.getType() == Drawable.DrawableType.LINE).Count(),
+            Settings.selectedDrawables.Where(d => d.getType() == Drawable.DrawableType.CIRCLE).Count()
+        ));
+    }
+
+    public static void deleteAllSelected(){
+        foreach (Drawable d  in Settings.selectedDrawables){
+            Settings.CanvasGlobalReference.Children.Remove(d as Control);
+        }
+
+        _points.RemoveAll(d => d.getType() == Drawable.DrawableType.POINT);
+        _lines.RemoveAll(l => l.getType() == Drawable.DrawableType.LINE || l.getType() == Drawable.DrawableType.CIRCLE);
+        logDatabaseContent();
+    }
+
+    public static void unselectAll(){
+        foreach (Drawable d in Settings.selectedDrawables){
+            switch (d.getType()){
+                case Drawable.DrawableType.POINT:
+                    Point p = d as Point;
+                    p.Fill = p.getLayer().Color;
+                    break;
+                case Drawable.DrawableType.LINE:
+                    Line l = d as Line;
+                    l.Stroke = l.getLayer().Color;
+                    l.Start.Fill = l.getLayer().Color;
+                    l.End.Fill = l.getLayer().Color;
+                    break;
+                case Drawable.DrawableType.CIRCLE:
+                    Circle c = d as Circle;
+                    c.Centre.Fill = c.getLayer().Color;
+                    c.Stroke = c.getLayer().Color;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        Settings.selectedDrawables.Clear();
+    }
 }
