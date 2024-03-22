@@ -23,6 +23,7 @@
            <Button x:Name="DrawPointButton" Click="DrawPointFlag" HotKey="Ctrl+D">Point</Button>
            <Button x:Name="DrawLineButton" Click="DrawLineFlag">Line</Button>
            <Button x:Name="EscapeKeyHolder" Click="ESCButtonEvent" IsVisible="False" >ESC</Button>
+           <Button x:Name="DeleteKeyHolder" Click="DELButtonEvent" IsVisible="False" >DEL</Button>
            <Button x:Name="DrawCircleButton" Click="DrawCircleFlag" >Circle</Button>
        
        </StackPanel>
