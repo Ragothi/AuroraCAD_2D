@@ -68,6 +68,7 @@ public partial class CanvasView : UserControl{
                 p = point;
                 flag = true;
                 Settings.isNewPointAdded = false;
+                break;
             }
         }
 
@@ -85,7 +86,7 @@ public partial class CanvasView : UserControl{
         }
         
         if (Settings.isDrawXXXSelected[0]){
-            Point p = _canvasViewModel.PointerPressedHandler(sender,e);
+            Point p = new Point(Settings.mouseX,Settings.mouseY);
             p = validatePoint(p);
             Settings.isNewPointAdded = true;
             p.PointerEntered += PointOnPointerEntered;
@@ -93,7 +94,7 @@ public partial class CanvasView : UserControl{
         }
         else if (Settings.isDrawXXXSelected[1]){
             if (Settings.selectedPoint is null){
-                Point p = _canvasViewModel.PointerPressedHandler(sender,e);
+                Point p = new Point(Settings.mouseX,Settings.mouseY);
                 Settings.selectedPoint = validatePoint(p);
                 Point p2 = new Point(Settings.mouseX, Settings.mouseY);
                 Line line = new Line(Settings.selectedPoint, p2);
@@ -116,9 +117,9 @@ public partial class CanvasView : UserControl{
             }
         } else if (Settings.isDrawXXXSelected[2]){
             if (Settings.selectedPoint == null){
-                Point p = _canvasViewModel.PointerPressedHandler(sender,e);
+                Point p = new Point(Settings.mouseX,Settings.mouseY);
                 Settings.selectedPoint =  validatePoint(p);
-                Circle c = new Circle(Settings.selectedPoint.X, Settings.selectedPoint.Y, 10);
+                Circle c = new Circle(Settings.selectedPoint, 10);
                 Settings.selectedCircle = c;
                 drawNew(c);
             }
@@ -151,9 +152,6 @@ public partial class CanvasView : UserControl{
         
     }
 
-    private void redraw(){
-        
-    }
     
     public void drawNew(Drawable d){
         switch (d.getType()){

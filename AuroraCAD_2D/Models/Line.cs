@@ -22,7 +22,8 @@ public class Line : Avalonia.Controls.Shapes.Line, Drawable{
     }
 
     public void replaceEnd(double x, double y){
-        _end = new Point(x, y);
+        this._end.X = x;
+        this._end.Y = y;
         EndPoint = new Avalonia.Point(_end.X, _end.Y);
     }
 

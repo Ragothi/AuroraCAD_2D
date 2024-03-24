@@ -69,7 +69,15 @@ public class Database{
                     break;
                 case "<CL>":
                     Settings.selectedLayer = _layers[int.Parse(vals[1])];
-                    addLine(new Circle(double.Parse(vals[2]),double.Parse(vals[3]),double.Parse(vals[4])));
+                    Point centre = null;
+                    double x= double.Parse(vals[2]);
+                    double y = double.Parse(vals[3]);
+                    foreach (Point point in _points){
+                        if (point.X == x && point.Y == y){
+                            centre = point;
+                        }
+                    }
+                    addLine(new Circle(centre,double.Parse(vals[4])));
                     break;
             }
         }
@@ -143,19 +151,27 @@ public class Database{
                 Point point2 = l.End;
                 if ((point.X >= xMin && point.X <= xMax && point.Y >= yMin && point.Y <= yMax)
                     || (point2.X >= xMin && point2.X <= xMax && point2.Y >= yMin && point2.Y <= yMax)){
-                    Settings.selectedDrawables.Add(point);
-                    Settings.selectedDrawables.Add(point2);
+                    if (!Settings.selectedDrawables.Contains(point)){
+                        Settings.selectedDrawables.Add(point);
+                    }
+                    if (!Settings.selectedDrawables.Contains(point2)){
+                        Settings.selectedDrawables.Add(point2);
+                    }
                     Settings.selectedDrawables.Add(line);
                 }
             } else if (line.getType() == Drawable.DrawableType.CIRCLE){
                 Circle c = line as Circle;
                 Point point = c.Centre;
                 if (point.X >= xMin-c.Rad && point.X <= xMax+c.Rad && point.Y >= yMin-c.Rad && point.Y <= yMax+c.Rad){
-                    Settings.selectedDrawables.Add(point);
+                    if (!Settings.selectedDrawables.Contains(point)){
+                        Settings.selectedDrawables.Add(point);
+                    }
                     Settings.selectedDrawables.Add(c);
                 }
             }
         }
+        
+        
         
         logSelectedDrawablesContent();
         

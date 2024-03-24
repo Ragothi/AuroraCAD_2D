@@ -11,8 +11,8 @@ public class Circle : Ellipse, Drawable{
     private Point _centre;
     private double _rad;
 
-    public Circle(double x, double y, double rad){
-        _centre = new Point(x, y);
+    public Circle(Point centre, double rad){
+        _centre = centre;
         _layer = Settings.selectedLayer;
         _rad = rad;
         Stroke = Layer.Color;
